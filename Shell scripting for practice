@@ -1,0 +1,97 @@
+youtube channel link - https://www.youtube.com/watch?v=DZBZnLU-PHs
+
+################## Question 1 ################## 
+#!/bin/bash
+VARIABLE_NAME="VARIABLE_VALUE
+channel="dgruploads"
+################################################
+
+################## Question 2 ################## how to give executable permission for a script file
+chmod +x script.sh
+./script.sh
+################################################
+
+################## Question 3 ################## how to pass arguments
+#!/bin/bash
+echo "First argument: $1"
+echo "Second argument: $2"
+
+./script.sh dgruploads awesome
+################################################
+
+################## Question 4 ################## check if the file exists
+#!/bin/bash
+if [ -e /var/www/html/index.html ]; then
+  echo "File exists"
+else 
+  echo "File does not exist"
+fi
+################################################
+
+################## Question 5 ################## for loop
+#!/bin/bash
+for item in file1 file2 file3; do
+   echo $item
+done
+################################################
+
+################## Question 6 ################## file redirection (very important)
+ls /nonexistent $> output.log
+################################################
+
+################## Question 7 ################## crontab (use cronguru )
+0 0 * * * /home/ubuntu/script.sh
+################################################
+
+################## Question 8 ################## (word replacement - sreamline editor)
+sed -i 's/oldtext/newtext/g' filename
+sed -i 's/one/ten/g' testfile
+################################################
+
+################## Question 9 ################## interactive input
+#!/bin/bash
+echo "Enter your name:"
+read name
+echo "Hello $name"
+################################################
+
+################## Question 10 ################## checking the exit code using $? function
+#!/bin/bash
+ls /home/ubuntu
+if [ $? -eq 0 ]; then
+  echo "command executed successfully"
+else
+  echo "Command failed execution"
+fi
+################################################
+
+################## Question 11 ################## function
+#!/bin/bash
+my_function() {
+  echo "This is a test function"
+}
+my_function
+################################################
+
+################## Question 12 ################## file redirection - append 
+echo "New data" >> filename
+################################################
+
+################## Question 13 ################## exuecuting build in varibles like date
+#!/bin/bash
+current_date=$(date)
+echo $current_date
+################################################
+
+################## Question 14 ################## catching errors
+#!/bin/bash
+set -e
+trap 'echo "Error occurred at line $LINENO"' ERR
+################################################
+
+################## Question 15 ################## handling csv files
+#!/bin/bash
+while IFS=, read -r colume1 colume2 colume3; do
+  echo "Colume 1: $colume1, Colume 2: $colume2, Colume 3: $colume3"
+done < filename.csv
+################################################
