@@ -89,48 +89,49 @@ exit 0
 ##################################################################
 ################User creation with random password#############################
 #!/bin/bash
-
-# Check for superuser privileges
-if [[ $EUID -ne 0 ]]; then
-    echo "Please run with sudo privileges"
-    exit 1
+#
+#check if the user runs with sudo privilege
+if [[ ${UID} -ne 0 ]]
+then
+        echo "please run with sudo privilege"
+        exit 1
 fi
-
-# Get username and full name from standard input
-read -p "Enter the username: " USERNAME
-read -p "Enter the full name: " COMMENT
-
-# Generate a strong password
-PASSWORD=$(openssl rand -base64 32)
-
-# Create the user account
-useradd -m "$USERNAME" -c "$COMMENT"
-
-if [[ $? -ne 0 ]]; then
-    echo "Error: Failed to create user $USERNAME"
-    exit 1
+#If they dont't supply at least one argument, then give them help.
+if [[ "${#}" -lt 1 ]]
+then
+        echo "Usage: ${0} USER_NAME [COMENT]..."
+        echo "Create an account on the local sytem with the name of USER_NAME and a comments filed of COMMENT."
+        exit 1
 fi
-
-# Set the password using 'passwd' and a here-document.
-echo "$USERNAME:$PASSWORD" | chpasswd
-if [[ $? -ne 0 ]]; then
-    echo "the password could not be set"
-    userdel "$USERNAME"
-    exit 1
+#user name
+read -p "Enter the user name:" USERNAME
+#full name
+read -p "Enter the full name:" COMMENT
+#generate password
+PASSWORD=$(date +%s%N | sha256sum | head -c20)
+#create user with given details
+useradd -m "${USERNAME}" -c "${COMMENT}"
+#check if the user command is succeed
+if [[ ${?} -ne 0 ]]
+then
+        echo " the user account could not be created"
+        exit 1
 fi
-
-# Force password change at first login
-chage -d 0 "$USERNAME"
-
-if [[ $? -ne 0 ]]; then
-    echo "warning: failed to force password change."
+#set the password and ensure it
+echo "${USERNAME}:${PASSWORD}" | chpasswd
+if [[ ${?} -ne 0 ]]
+then
+        echo "the password could not be set"
+        userdel "$USERNAME"
+        exit 1
 fi
-
-
-# Display user information
-echo "Username: $USERNAME"
-echo "Password: $PASSWORD"
-echo "Host: $(hostname)"
-
-unset PASSWORD #clear password from memory.
+#force the user to change password while login
+passwd -e ${USERNAME}
+#dispaly the user name, passwd, and the host where user was created.
+echo
+echo "USERNAME - ${USERNAME}"
+echo
+echo "PASSWORD - ${PASSWORD}"
+echo
+echo "HOST - ${HOSTNAME}"
 exit 0
