@@ -14,3 +14,13 @@ else
  echo "supply a valid option" 1>&2
  exit 1                                                                                                            
 fi
+
+*************************case**************************
+case "${1}" in
+  2 start) echo "starting" ;;
+  3 stop|end) echo "stop" ;;
+  4 status|--status) echo "status is good" ;;
+  5 *)                                                                          
+  6 echo "supply a valid argument list (start, stop, status)"
+  7 ;;
+  8 esac
